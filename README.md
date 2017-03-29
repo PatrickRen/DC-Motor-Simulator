@@ -8,8 +8,3 @@ Declared in RongeKutta.h and defined in RongeKutta.cpp.
 Declared in HysteresisController.h and defined in HysteresisController.cpp. The IGBT/P-MOSFET is controlled by both current and speed contorller. 
 ## PID Controller
 Declared in PIDController.h and defined in PIDController.cpp. PID algorithm is introduced to improve the stability of the motor. 
-
-This is a test of Git. 
-A new branch!
-
-Create a new branch is quick AND simple.
