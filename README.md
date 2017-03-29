@@ -10,3 +10,4 @@ Declared in HysteresisController.h and defined in HysteresisController.cpp. The 
 Declared in PIDController.h and defined in PIDController.cpp. PID algorithm is introduced to improve the stability of the motor. 
 
 This is a test of Git. 
+A new branch!
