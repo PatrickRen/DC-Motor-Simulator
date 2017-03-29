@@ -286,3 +286,8 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+#My configuration
+*.vcxproj
+*filters
+ReadMe.txt
