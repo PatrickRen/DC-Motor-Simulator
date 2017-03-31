@@ -40,6 +40,8 @@ void RKMotorSimu::RKCalc(Motor M, double iq0, double w0, bool IGBT)
 	pw = (Phi_f*i_q-B*w)/J
 ------------------------------------------------------------*/
 {
+	static bool DiodeState = 1;
+	if (IGBT == 1) DiodeState = 1;
 	double IGBTState = static_cast<double>(IGBT);  //强制转换成double与Uq进行乘法
 
 	//状态方程参数
@@ -50,23 +52,26 @@ void RKMotorSimu::RKCalc(Motor M, double iq0, double w0, bool IGBT)
 	double BB = M.GetParameter(B);
 	double JJ = M.GetParameter(J);
 
+	if (DiodeState == 0) Uq = w0*Phif;
+	else Uq = Uq*IGBTState;
+
 	//四阶龙格-库塔法计算
-	double Ki1 = (Uq*IGBTState - w0*Phif - Rq*iq0) / Lq;
+	double Ki1 = (Uq - w0*Phif - Rq*iq0) / Lq;
 	double Kw1 = (Phif*iq0 - BB*w0) / JJ;
 
 	double iq0_51 = iq0 + h / 2 * Ki1;
 	double w0_51 = w0 + h / 2 * Kw1;
-	double Ki2 = (Uq*IGBTState - w0_51*Phif - Rq*iq0_51) / Lq;
+	double Ki2 = (Uq - w0_51*Phif - Rq*iq0_51) / Lq;
 	double Kw2 = (Phif*iq0_51 - BB*w0_51) / JJ;
 
 	double iq0_52 = iq0 + h / 2 * Ki2;
 	double w0_52 = w0 + h / 2 * Kw2;
-	double Ki3 = (Uq*IGBTState - w0_52*Phif - Rq*iq0_52) / Lq;
+	double Ki3 = (Uq - w0_52*Phif - Rq*iq0_52) / Lq;
 	double Kw3 = (Phif*iq0_52 - BB*w0_52) / JJ;
 
 	double iq1_1 = iq0 + h * Ki3;
 	double w1_1 = w0 + h * Kw3;
-	double Ki4 = (Uq*IGBTState - w1_1*Phif - Rq*iq1_1) / Lq;
+	double Ki4 = (Uq - w1_1*Phif - Rq*iq1_1) / Lq;
 	double Kw4 = (Phif*iq1_1 - BB*w1_1) / JJ;
 
 	double Ki = (Ki1 + 2*Ki2 + 2*Ki3 + Ki4)/6.0;
@@ -81,6 +86,14 @@ void RKMotorSimu::RKCalc(Motor M, double iq0, double w0, bool IGBT)
 	{
 		if (w1*Phif <= Uq) iq1 = 0;
 	}*/
+	if (iq1 < 0)
+	{
+		DiodeState = 0;
+	}
+
+	//add for test
+
+
 }
 
 double RKMotorSimu::GetIResult(void)
