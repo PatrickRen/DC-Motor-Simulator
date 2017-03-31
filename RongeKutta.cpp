@@ -77,11 +77,10 @@ void RKMotorSimu::RKCalc(Motor M, double iq0, double w0, bool IGBT)
 	iq1 = iq0 + h*Ki;
 	w1 = w0 + h*Kw;
 
-	if (iq1 < 0)
+	/*if (iq1 < 0)  //电枢电流小于0时需比较电枢电压与电源电压的大小
 	{
 		if (w1*Phif <= Uq) iq1 = 0;
-	}
-	//if (iq1 < 0) iq1 = 0;  //如果计算出电流小于0则直接置为0
+	}*/
 }
 
 double RKMotorSimu::GetIResult(void)
